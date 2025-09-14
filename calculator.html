@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: rgb(3, 136, 136);
+        font-family: Arial, sans-serif;
+      }
+      .calculator {
+        background: #2d3436;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        width: 320px;
+      }
+      .display {
+        width: 100%;
+        height: 60px;
+        margin-bottom: 20px;
+        font-size: 24px;
+        text-align: right;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        background: #dfe6e9;
+        outline: none;
+      }
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 70px);
+        gap: 10px;
+        justify-content: center;
+      }
+      button {
+        height: 60px;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background: #636e72;
+        color: white;
+        transition: 0.2s;
+      }
+      button:hover {
+        background: #2d3436;
+      }
+      .operator {
+        background: #fdcb6e;
+        color: black;
+      }
+      .operator:hover {
+        background: #ffeaa7;
+      }
+      .equal {
+        background: #00b894;
+        grid-column: span 2;
+      }
+      .equal:hover {
+        background: #55efc4;
+      }
+      .clear {
+        background: #d63031;
+      }
+      .clear:hover {
+        background: #ff7675;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <input type="text" id="display" class="display" disabled />
+      <div class="buttons">
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button onclick="appendValue('/')">÷</button>
+        <button onclick="appendValue('*')">×</button>
+        <button class="operator" onclick="appendValue('-')">−</button>
+
+        <button onclick="appendValue('7')">7</button>
+        <button onclick="appendValue('8')">8</button>
+        <button onclick="appendValue('9')">9</button>
+        <button class="operator" onclick="appendValue('+')">+</button>
+
+        <button onclick="appendValue('4')">4</button>
+        <button onclick="appendValue('5')">5</button>
+        <button onclick="appendValue('6')">6</button>
+        <button onclick="appendValue('.')">.</button>
+
+        <button onclick="appendValue('1')">1</button>
+        <button onclick="appendValue('2')">2</button>
+        <button onclick="appendValue('3')">3</button>
+        <button class="equal" onclick="calculateResult()">=</button>
+
+        <button onclick="appendValue('0')" style="grid-column: span 2">
+          0
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let display = document.getElementById("display")
+
+      function appendValue(value) {
+        display.value += value
+        liveResult()
+      }
+
+      function clearDisplay() {
+        display.value = ""
+      }
+
+      function calculateResult() {
+        try {
+          display.value = eval(display.value)
+        } catch {
+          display.value = "Error"
+        }
+      }
+
+      function liveResult() {
+        try {
+          if (display.value) {
+            let result = eval(display.value)
+            display.placeholder = "= " + result
+          } else {
+            display.placeholder = ""
+          }
+        } catch {
+          display.placeholder = ""
+        }
+      }
+
+      // Keyboard support
+      document.addEventListener("keydown", function (event) {
+        const key = event.key
+
+        if (!isNaN(key) || "+-*/.".includes(key)) {
+          appendValue(key)
+        } else if (key === "Enter") {
+          event.preventDefault()
+          calculateResult()
+        } else if (key === "Backspace") {
+          display.value = display.value.slice(0, -1)
+          liveResult()
+        } else if (key.toLowerCase() === "c") {
+          clearDisplay()
+        }
+      })
+    </script>
+  </body>
+</html>
